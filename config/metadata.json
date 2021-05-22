@@ -1,0 +1,43 @@
+{
+    "type" : "json",
+    "compression" : "gzip",
+    "fact" : {
+        "name" : "service",
+        "dimensions": [
+            {
+                "name" : "identifier",
+                "value" : "atendimento.protocolo"
+            },
+            {
+                "name" : "evaluation",
+                "value" : "atendimento.avaliacao",
+                "type" : "float"
+            },
+            {
+                "name" : "duration",
+                "value" : "atendimento.duracao",
+                "type" : {
+                    "source" : "date",
+                    "destination" : "long"
+                }
+            },
+            {
+                "name" : "date",
+                "isTimeDimension": true,
+                "value" : "atendimento.data"
+            },
+            {
+                "name" : "status",
+                "value" : "atendimento.status"
+            },
+            {
+                "name" : "client",
+                "value" : "cliente.cpf"
+            },
+            {
+                "name" : "phone",
+                "value" : "atendimento.telefoneDiscado"
+            }
+        ]
+    }
+}
