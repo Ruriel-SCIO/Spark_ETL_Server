@@ -7,8 +7,8 @@ class _MetadataLoader:
     def __init__(self):
         load_dotenv()
         metadataFile = open(getenv('metadataFile'))
-        self.metadata = json_load(metadataFile)
+        self._metadata = json_load(metadataFile)
         metadataFile.close()
 
     def get_metadata(self):
-        return self.metadata
+        return self._metadata
