@@ -23,6 +23,10 @@
                 }
             },
             {
+                "name" : "operator",
+                "value" : "atendimento.operador"
+            },
+            {
                 "name" : "date",
                 "isTimeDimension": true,
                 "value" : "atendimento.data"
