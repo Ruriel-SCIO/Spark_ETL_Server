@@ -9,5 +9,5 @@ class _SparkSessionLoader:
         self._spark_session.conf.set("spark.sql.shuffle.partitions", 5)
         self._spark_session.conf.set("spark.sql.session.timeZone", "UTC")
     
-    def get_spark_session(self):
+    def getSparkSession(self):
         return self._spark_session

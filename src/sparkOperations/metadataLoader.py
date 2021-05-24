@@ -1,14 +1,14 @@
-from dotenv import load_dotenv
-from json import load as json_load
+from dotenv import load_dotenv as loadDotEnv
+from json import load as jsonLoad
 from os import getenv
 
 
 class _MetadataLoader:
     def __init__(self):
-        load_dotenv()
+        loadDotEnv()
         metadataFile = open(getenv('metadataFile'))
-        self._metadata = json_load(metadataFile)
+        self._metadata = jsonLoad(metadataFile)
         metadataFile.close()
 
-    def get_metadata(self):
+    def getMetadata(self):
         return self._metadata

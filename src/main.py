@@ -1,6 +1,7 @@
-from spark_operations.etl import ETL
+from sparkOperations.etl import ETL
 if __name__ == "__main__":
     etl = ETL()
-    fileLocation = etl.pre_processing('./datalake/generated.json.gz')
-    etl.load_data(fileLocation)
-    etl.convert_dataframe()
+    fileLocation = etl.preProcessing('./datalake/generated.json.gz')
+    etl.loadData(fileLocation)
+    etl.convertDataframe()
+    convertedJSON = etl.writeDataframeJson()
