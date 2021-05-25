@@ -29,7 +29,8 @@
             {
                 "name" : "date",
                 "isTimeDimension": true,
-                "value" : "atendimento.data"
+                "value" : "atendimento.data",
+                "format" : "dd/MM/yyyy HH:mm:ss"
             },
             {
                 "name" : "status",

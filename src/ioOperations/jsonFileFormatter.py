@@ -1,5 +1,6 @@
-from os import listdir
-from shutil import rmtree
+from os import listdir as listDir
+from shutil import rmtree as rmTree
+
 
 def _decodeLine(line):
     line = line.replace("\"[", "[")
@@ -11,11 +12,9 @@ def _decodeLine(line):
 
 
 def formatFile(tempFolder, outputLocation):
-    tmpFileList = listdir(tempFolder)
+    tmpFileList = listDir(tempFolder)
     if '_SUCCESS' in tmpFileList:
         with open(outputLocation, 'w') as output:
-            isFirstLine = True
-            output.write('[')
             for tmpFileName in tmpFileList:
                 if tmpFileName.endswith(".json"):
                     tmpFileLocation = tempFolder+'/'+tmpFileName
@@ -23,13 +22,9 @@ def formatFile(tempFolder, outputLocation):
                         for line in tmpFile:
                             line = line.strip()
                             if len(line) > 0:
-                                if isFirstLine:
-                                    isFirstLine = False
-                                else:
-                                    output.write(',')
                                 output.write(_decodeLine(line))
-            output.write(']')
-        rmtree(tempFolder)
+                                output.write('\n')
+        rmTree(tempFolder)
         return True
     else:
         return False
