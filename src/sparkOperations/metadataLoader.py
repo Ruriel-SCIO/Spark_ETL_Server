@@ -3,7 +3,7 @@ from os import getenv
 
 class _MetadataLoader:
     def __init__(self):
-        metadataFile = open(getenv('METADATA_FILE'))
+        metadataFile = open(getenv("METADATA_FILE"))
         self._metadata = jsonLoad(metadataFile)
         metadataFile.close()
 

@@ -1,7 +1,7 @@
 from sparkOperations.etl import ETL
 from dotenv import load_dotenv as loadDotEnv
 from rest.api import sendToDruid
-from os import getenv
+from os import getenv, environ
 if __name__ == "__main__":
     loadDotEnv()
     print("Starting ETL module...")
