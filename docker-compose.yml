@@ -1,0 +1,13 @@
+version: '3'
+services:
+    etl_server:
+        build: .
+        container_name: etl_server
+        volumes:
+            - ./config:/app/config
+            - ./datalake:/datalake
+        environment: 
+            JSON_FILE: '/datalake/generated.json.gz'
+            METADATA_FILE: '/app/config/metadata.json'
+            DRUID_SERVER: 'http://localhost:8888/druid/indexer/v1/task'
+            PYSPARK_SUBMIT_ARGS: '--master local[*] pyspark-shell'

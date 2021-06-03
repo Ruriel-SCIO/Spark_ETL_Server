@@ -37,7 +37,10 @@ def _prepareRequest(metadata, jsonFolder):
                     "segmentGranularity": "day",
                     "queryGranularity": "none",
                     "rollup": True
-                }
+                },
+                "metricsSpec":[
+                    { "type": "count", "name": "count"}
+                ]
             },
             "ioConfig": {
                 "type": "index_parallel",
@@ -60,7 +63,7 @@ def _prepareRequest(metadata, jsonFolder):
 
 def sendToDruid(metadata, jsonFolder):
     body = _prepareRequest(metadata, jsonFolder)
-    druidServer = getenv("druidServer")
+    druidServer = getenv("DRUID_SERVER")
     response = requests.post(druidServer, json=body)
     print('Response: {}'.format(response.text))
     return response
