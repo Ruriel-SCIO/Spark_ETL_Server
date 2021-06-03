@@ -3,7 +3,6 @@ services:
     etl_server:
         build: .
         container_name: etl_server
-        network_mode: host
         volumes:
             - ./config:/app/config
             - ./datalake:/datalake
@@ -11,3 +10,4 @@ services:
             JSON_FILE: '/datalake/generated.json.gz'
             METADATA_FILE: '/app/config/metadata.json'
             DRUID_SERVER: 'http://localhost:8888/druid/indexer/v1/task'
+            PYSPARK_SUBMIT_ARGS: '--master local[*] pyspark-shell'
