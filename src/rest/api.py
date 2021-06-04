@@ -2,7 +2,6 @@ import requests
 from os.path import dirname, basename
 from os import getenv
 
-
 def _prepareRequest(metadata, jsonFolder):
     dimensions = []
     timestampColumn = None
@@ -31,15 +30,15 @@ def _prepareRequest(metadata, jsonFolder):
                 "timestampSpec": timestampColumn,
                 "dimensionsSpec": {
                     "dimensions": dimensions,
-                    "dimensionExclusions" : [timestampColumn["column"]]
+                    "dimensionExclusions": [timestampColumn["column"]]
                 },
                 "granularitySpec": {
                     "segmentGranularity": "day",
-                    "queryGranularity": "none",
+                    "queryGranularity": "day",
                     "rollup": True
                 },
-                "metricsSpec":[
-                    { "type": "count", "name": "count"}
+                "metricsSpec": [
+                    {"type": "count", "name": "count"}
                 ]
             },
             "ioConfig": {

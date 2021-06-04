@@ -131,3 +131,4 @@ dmypy.json
 #PySpark generated folders
 checkpoint
 spark-warehouse
+datalake/convertedDataframe*

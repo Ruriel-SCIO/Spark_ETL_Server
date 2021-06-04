@@ -1,8 +1,8 @@
 from .metadataLoader import _MetadataLoader
 from .sparkSessionLoader import _SparkSessionLoader
 from ioOperations import compression, jsonFileFormatter
-from os.path import basename
-from os import makedirs
+from os.path import basename, dirname
+from os import makedirs, getcwd
 from uuid import uuid4
 from tempfile import gettempdir as getTempDir
 from shutil import copyfile
@@ -28,6 +28,7 @@ class ETL:
     def preProcessing(self, fileLocation):
         metadata = self.metadata
         outputFilename = basename(fileLocation)
+        self.outputFolder = dirname(fileLocation.replace('.', getcwd(), 1)) if fileLocation.startswith('./') else dirname(fileLocation)
         makedirs(self.tempFolder, exist_ok=True)
         if 'compression' in metadata:
             length = len(outputFilename)
@@ -42,7 +43,6 @@ class ETL:
     def loadData(self, fileLocation):
         self._dataframe = self.spark.read.options(
             inferSchema=True).json(fileLocation, multiLine=True)
-
     #Drops all the columns from the dataframe not present in the metadata file.
     def cleanDataframe(self):
         valid_columns = [dimension['name'] for dimension in self.metadata['fact']['dimensions']]
@@ -66,7 +66,7 @@ class ETL:
     
     def writeDataframeJson(self):
         convertedDataframeFolder = '{}/{}'.format(self.tempFolder, 'convertedDataframe')
-        outputJSONFileName = '{}/{}'.format(self.tempFolder, 'convertedDataframe.json')
+        outputJSONFileName = '{}/{}'.format(self.outputFolder, 'convertedDataframe.json')
         compressedJSONFileName = '{}.{}'.format(outputJSONFileName, 'gz')
         self._dataframe.write.mode("overwrite").format('json').save(convertedDataframeFolder)
         jsonFileFormatter.formatFile(convertedDataframeFolder, outputJSONFileName)
