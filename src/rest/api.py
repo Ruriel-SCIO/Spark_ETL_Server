@@ -2,6 +2,10 @@ import requests
 from os.path import dirname, basename
 from os import getenv
 from time import sleep
+
+#Reads the metadata to format a valid request for a new task in Apache Druid.
+#It will use the file defined by the jsonFolder variable.
+#You can see more details about the request body in https://druid.staged.apache.org/docs/latest/ingestion/tasks.html
 def _prepareRequest(metadata, jsonFolder):
     dimensions = []
     timestampColumn = None
@@ -59,13 +63,20 @@ def _prepareRequest(metadata, jsonFolder):
     }
     return requestBody
 
+#Makes a request to Druid to test it if it's ready. If it isn't, sleeps for awhile and tries again.
+#The sleepTime doubles itself after each failure.
+#It will keep trying up to the times specified in the retries variable.
+#When a successful request is made, returns True.
+#If no successful request is returned after 10 retries, returns False.
 def waitForStatus():
     sleepTime=0.5
     retries=10
     success=False
+    druidServer = getenv("DRUID_SERVER")
+    url = '{}/status'.format(druidServer)
     while success == False and retries > 0:
         try:
-            response = requests.get("http://localhost:8888/status")
+            response = requests.get(url)
             if response.status_code == 200 and "error" not in response:
                 success = True
         except requests.exceptions.ConnectionError:
@@ -75,13 +86,17 @@ def waitForStatus():
             retries-=1
     return success
 
+#Waits for Druid to be available. If it is, takes the request prepared by the _prepareRequest 
+#function and sends it to Druid.
 def sendToDruid(metadata, jsonFolder):
-    body = _prepareRequest(metadata, jsonFolder)
-    druidServer = getenv("DRUID_SERVER")
     print('Testing if Druid is available.')
     if waitForStatus():
+        print('Druid is available. Preparing request.')
+        druidServer = getenv("DRUID_SERVER")
+        url = '{}/druid/indexer/v1/task'.format(druidServer)
+        body = _prepareRequest(metadata, jsonFolder)
         print("Sending file to Druid...")
-        response = requests.post(druidServer, json=body)
+        response = requests.post(url, json=body)
         print('Response: {}'.format(response.text))
         return response
     else:
