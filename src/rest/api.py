@@ -72,9 +72,11 @@ def waitForStatus():
     sleepTime=0.5
     retries=10
     success=False
+    druidServer = getenv("DRUID_SERVER")
+    url = '{}/status'.format(druidServer)
     while success == False and retries > 0:
         try:
-            response = requests.get("http://localhost:8888/status")
+            response = requests.get(url)
             if response.status_code == 200 and "error" not in response:
                 success = True
         except requests.exceptions.ConnectionError:
@@ -91,9 +93,10 @@ def sendToDruid(metadata, jsonFolder):
     if waitForStatus():
         print('Druid is available. Preparing request.')
         druidServer = getenv("DRUID_SERVER")
+        url = '{}/druid/indexer/v1/task'.format(druidServer)
         body = _prepareRequest(metadata, jsonFolder)
         print("Sending file to Druid...")
-        response = requests.post(druidServer, json=body)
+        response = requests.post(url, json=body)
         print('Response: {}'.format(response.text))
         return response
     else:

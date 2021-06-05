@@ -3,11 +3,15 @@ services:
     etl_server:
         build: .
         container_name: etl_server
-        volumes:
+        volumes: #Uses the local folders config and datalake as volumes to read and write data.
             - ./config:/app/config
             - ./datalake:/datalake
         environment: 
+            #Indicates the folder where the generated
+            #JSON file is in the container.
             JSON_FILE: '/datalake/generated.json.gz'
+            #Indicates the folder where the metadata is in the container.
             METADATA_FILE: '/app/config/metadata.json'
-            DRUID_SERVER: 'http://localhost:8888/druid/indexer/v1/task'
+            #Indicates where the Druid server is located. 
+            DRUID_SERVER: 'http://localhost:8888'
             PYSPARK_SUBMIT_ARGS: '--master local[*] pyspark-shell'
