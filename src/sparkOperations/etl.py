@@ -22,9 +22,9 @@ class ETL:
         self.metadata = _MetadataLoader().getMetadata()
         self.spark = _SparkSessionLoader().getSparkSession()
         self.tempFolder = '{}/{}/{}'.format(getTempDir(),'spark_etl_server', uuid4())
+    
     # Reads the file to be processed. If it's compressed, uncompress in the temp folder and return it's location.
     # Otherwise, simply copies it to the temp folder.
-
     def preProcessing(self, fileLocation):
         metadata = self.metadata
         outputFilename = basename(fileLocation)
@@ -43,6 +43,7 @@ class ETL:
     def loadData(self, fileLocation):
         self._dataframe = self.spark.read.options(
             inferSchema=True).json(fileLocation, multiLine=True)
+    
     #Drops all the columns from the dataframe not present in the metadata file.
     def cleanDataframe(self):
         valid_columns = [dimension['name'] for dimension in self.metadata['fact']['dimensions']]
@@ -64,6 +65,7 @@ class ETL:
             self._dataframe = self._dataframe.withColumn(dimension['name'], column)
         self.cleanDataframe()
     
+    #Converts the dataframe into a JSON where each line represents an object.
     def writeDataframeJson(self):
         convertedDataframeFolder = '{}/{}'.format(self.tempFolder, 'convertedDataframe')
         outputJSONFileName = '{}/{}'.format(self.outputFolder, 'convertedDataframe.json')
