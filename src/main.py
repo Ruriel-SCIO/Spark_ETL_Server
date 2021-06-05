@@ -14,6 +14,5 @@ if __name__ == "__main__":
     etl.convertDataframe()
     print("Saving dataframe to JSON file...")
     convertedJSONFile = etl.writeDataframeJson()
-    print("Sending file to Druid...")
     response = sendToDruid(etl.metadata, convertedJSONFile)
     print("Done.")
